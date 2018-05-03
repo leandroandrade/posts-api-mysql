@@ -5,12 +5,13 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/mysql"
 	"log"
 	"database/sql"
+	"errors"
 )
 
-func FindAll() []model.Post {
+func FindAll() ([]model.Post, error) {
 	rows, err := getPosts()
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, errors.New(err.Error())
 	}
 	defer rows.Close()
 
@@ -23,7 +24,7 @@ func FindAll() []model.Post {
 		}
 		posts = append(posts, post)
 	}
-	return posts
+	return posts, nil
 }
 
 func getPosts() (*sql.Rows, error) {
