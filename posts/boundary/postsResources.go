@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"github.com/gorilla/mux"
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
+	"database/sql"
 )
 
 func GetPosts(writer http.ResponseWriter, _ *http.Request) *handler.AppError {
@@ -85,6 +86,24 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) *handler.AppE
 	}
 
 	writer.WriteHeader(http.StatusNoContent)
+
+	return nil
+}
+
+func GetPostByID(writer http.ResponseWriter, request *http.Request) *handler.AppError {
+	vars := mux.Vars(request)
+
+	post, err := service.FindById(vars["id"])
+
+	switch err {
+	case sql.ErrNoRows:
+		logger.Error.Println(err.Error())
+		return &handler.AppError{Error: err.Error(), Message: "not found post id " + vars["id"], Code: http.StatusNotFound}
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(post)
 
 	return nil
 }

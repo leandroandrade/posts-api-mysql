@@ -12,10 +12,12 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
 	sub := router.PathPrefix("/resources").Subrouter()
+
 	sub.Handle("/posts", handler.AppHandler(boundary.GetPosts)).Methods("GET")
 	sub.Handle("/posts", handler.AppHandler(boundary.CreatePosts)).Methods("POST")
 	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.DeletePost)).Methods("DELETE")
 	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.UpdatePost)).Methods("PUT")
+	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.GetPostByID)).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 
