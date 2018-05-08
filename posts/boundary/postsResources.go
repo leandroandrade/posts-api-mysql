@@ -17,8 +17,8 @@ func GetPosts(writer http.ResponseWriter, _ *http.Request) *handler.AppError {
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(writer).Encode(posts)
 	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(posts)
 
 	return nil
 }
