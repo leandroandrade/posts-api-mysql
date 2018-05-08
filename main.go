@@ -13,7 +13,7 @@ func main() {
 
 	sub := router.PathPrefix("/resources").Subrouter()
 	sub.Handle("/posts", handler.AppHandler(boundary.GetPosts)).Methods("GET")
-	sub.HandleFunc("/posts", boundary.CreatePosts).Methods("POST")
+	sub.Handle("/posts", handler.AppHandler(boundary.CreatePosts)).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":3000", router))
 

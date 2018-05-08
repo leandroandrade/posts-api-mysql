@@ -17,7 +17,7 @@ func (fn AppHandler) ServeHTTP(writer http.ResponseWriter, r *http.Request) {
 }
 
 type AppError struct {
-	Error   error  `json:"error,omitempty"`
+	Error   string `json:"error,omitempty"`
 	Message string `json:"message,omitempty"`
 	Code    int    `json:"code,omitempty"`
 }
