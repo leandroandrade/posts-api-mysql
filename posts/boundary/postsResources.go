@@ -38,6 +38,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) *handler.App
 
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Header().Set("Location", request.Host+request.URL.Path+"/"+strconv.Itoa(post.Id))
+
 	writer.WriteHeader(http.StatusCreated)
 	json.NewEncoder(writer).Encode(post)
 
