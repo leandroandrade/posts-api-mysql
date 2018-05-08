@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
+	"time"
 )
 
 func Save(body []byte) (model.Post, error) {
@@ -22,12 +23,12 @@ func Save(body []byte) (model.Post, error) {
 }
 
 func process(post *model.Post) error {
-	stmt, err := mysql.DB.Prepare("INSERT INTO post(description) VALUES(?)")
+	stmt, err := mysql.DB.Prepare("INSERT INTO post(description, date_creation) VALUES(?, ?)")
 	if err != nil {
 		return err
 	}
 
-	result, err := stmt.Exec(post.Description)
+	result, err := stmt.Exec(post.Description, time.Now())
 	if err != nil {
 		return err
 	}
