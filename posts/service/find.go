@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
-	"log"
 	"database/sql"
 	"errors"
 )
@@ -19,8 +18,8 @@ func FindAll() ([]model.Post, error) {
 	var post model.Post
 
 	for rows.Next() {
-		if err = rows.Scan(&post.Id, &post.Description); err != nil {
-			log.Fatal(err.Error())
+		if err = rows.Scan(&post.Id, &post.Description, &post.DateCreation); err != nil {
+			return nil, err
 		}
 		posts = append(posts, post)
 	}

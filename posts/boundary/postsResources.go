@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"strconv"
 	"github.com/gorilla/mux"
+	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
 func GetPosts(writer http.ResponseWriter, _ *http.Request) *handler.AppError {
@@ -63,5 +64,27 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) *handler.AppE
 }
 
 func UpdatePost(writer http.ResponseWriter, request *http.Request) *handler.AppError {
+	vars := mux.Vars(request)
+
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		logger.Error.Println(err.Error())
+		return &handler.AppError{Error: err.Error(), Message: "cannot update the post", Code: http.StatusBadRequest}
+	}
+
+	var post model.Post
+	if err = json.NewDecoder(request.Body).Decode(&post); err != nil {
+		logger.Error.Println(err.Error())
+		return &handler.AppError{Error: err.Error(), Message: "cannot update the post", Code: http.StatusBadRequest}
+	}
+
+	post.Id = id
+	if err = service.Update(&post); err != nil {
+		logger.Error.Println(err.Error())
+		return &handler.AppError{Error: err.Error(), Message: "cannot update the post", Code: http.StatusBadRequest}
+	}
+
+	writer.WriteHeader(http.StatusNoContent)
+
 	return nil
 }
