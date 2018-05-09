@@ -1,15 +1,14 @@
 package service
 
 import (
-	"github.com/leandroandrade/posts-api-mysql/posts/model"
 	"encoding/json"
 	"errors"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
 	"time"
 )
 
-func Save(body []byte) (model.Post, error) {
-	var post model.Post
+func Save(body []byte) (Post, error) {
+	var post Post
 	if err := json.Unmarshal(body, &post); err != nil {
 		return post, errors.New("cannot unmarshal content")
 	}
@@ -22,7 +21,7 @@ func Save(body []byte) (model.Post, error) {
 
 }
 
-func process(post *model.Post) error {
+func process(post *Post) error {
 	stmt, err := mysql.DB.Prepare("INSERT INTO post(description, date_creation) VALUES(?, ?)")
 	if err != nil {
 		return err

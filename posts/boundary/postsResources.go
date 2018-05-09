@@ -9,7 +9,6 @@ import (
 	"io/ioutil"
 	"strconv"
 	"github.com/gorilla/mux"
-	"github.com/leandroandrade/posts-api-mysql/posts/model"
 	"database/sql"
 )
 
@@ -73,7 +72,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) *handler.AppE
 		return &handler.AppError{Error: err.Error(), Message: "cannot update the post", Code: http.StatusBadRequest}
 	}
 
-	var post model.Post
+	var post service.Post
 	if err = json.NewDecoder(request.Body).Decode(&post); err != nil {
 		logger.Error.Println(err.Error())
 		return &handler.AppError{Error: err.Error(), Message: "cannot update the post", Code: http.StatusBadRequest}
