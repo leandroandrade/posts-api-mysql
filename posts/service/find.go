@@ -17,7 +17,7 @@ func FindAll() ([]Post, error) {
 	var post Post
 
 	for rows.Next() {
-		if err = rows.Scan(&post.Id, &post.Description, &post.DateCreation); err != nil {
+		if err = rows.Scan(&post.Id, &post.Description, &post.DatePosted); err != nil {
 			return nil, err
 		}
 		posts = append(posts, post)

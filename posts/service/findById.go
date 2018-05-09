@@ -18,6 +18,6 @@ func FindById(id string) (Post, error) {
 }
 
 func getPostByID(identifier int, post *Post) error {
-	query := fmt.Sprintf("SELECT id, description, date_creation FROM post WHERE id=%d", identifier)
-	return mysql.DB.QueryRow(query).Scan(&post.Id, &post.Description, &post.DateCreation)
+	query := fmt.Sprintf("SELECT id, description, date_posted FROM post WHERE id=%d", identifier)
+	return mysql.DB.QueryRow(query).Scan(&post.Id, &post.Description, &post.DatePosted)
 }

@@ -22,12 +22,12 @@ func Save(body []byte) (Post, error) {
 }
 
 func process(post *Post) error {
-	stmt, err := mysql.DB.Prepare("INSERT INTO post(description, date_creation) VALUES(?, ?)")
+	stmt, err := mysql.DB.Prepare("INSERT INTO post(description, date_posted) VALUES(?, ?)")
 	if err != nil {
 		return err
 	}
 
-	result, err := stmt.Exec(post.Description, time.Now())
+	result, err := stmt.Exec(post.Description, time.Now().Local())
 	if err != nil {
 		return err
 	}
