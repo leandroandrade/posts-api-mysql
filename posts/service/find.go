@@ -2,12 +2,20 @@ package service
 
 import (
 	"github.com/leandroandrade/posts-api-mysql/mysql"
-	"database/sql"
 	"errors"
 )
 
 func FindAll() ([]Post, error) {
-	rows, err := getPosts()
+	posts, err := getAllPosts()
+	if err != nil {
+		return nil, err
+	}
+
+	return posts, nil
+}
+
+func getAllPosts() ([]Post, error) {
+	rows, err := mysql.DB.Query("select * from post")
 	if err != nil {
 		return nil, errors.New(err.Error())
 	}
@@ -22,10 +30,6 @@ func FindAll() ([]Post, error) {
 		}
 		posts = append(posts, post)
 	}
-	return posts, nil
-}
 
-func getPosts() (*sql.Rows, error) {
-	rows, err := mysql.DB.Query("select * from post")
-	return rows, err
+	return posts, err
 }
