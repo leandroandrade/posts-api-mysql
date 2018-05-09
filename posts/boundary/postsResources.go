@@ -102,3 +102,20 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) *handler.App
 
 	return nil
 }
+
+func FindPostsPagination(writer http.ResponseWriter, request *http.Request) *handler.AppError {
+	size := request.URL.Query().Get("size")
+	page := request.URL.Query().Get("page")
+
+	posts, err := service.FindWithPagination(size, page)
+	if err != nil {
+		logger.Error.Println(err.Error())
+		return &handler.AppError{Error: err.Error(), Message: "internal Error", Code: 500}
+	}
+
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(http.StatusOK)
+	json.NewEncoder(writer).Encode(posts)
+
+	return nil
+}

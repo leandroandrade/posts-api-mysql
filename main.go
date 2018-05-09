@@ -13,6 +13,10 @@ func main() {
 
 	sub := router.PathPrefix("/resources").Subrouter()
 
+	sub.Path("/posts").Queries("size", "{size}", "page", "{page}").
+		Handler(handler.AppHandler(boundary.FindPostsPagination)).
+		Methods("GET")
+
 	sub.Handle("/posts", handler.AppHandler(boundary.GetPosts)).Methods("GET")
 	sub.Handle("/posts", handler.AppHandler(boundary.CreatePosts)).Methods("POST")
 	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.DeletePost)).Methods("DELETE")
