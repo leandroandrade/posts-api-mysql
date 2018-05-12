@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"strconv"
+	"math"
 )
 
 func FindWithPagination(size string, page string) ([]Post, error) {
@@ -19,6 +20,16 @@ func FindWithPagination(size string, page string) ([]Post, error) {
 }
 
 func getPostsPagination(size int, page int) ([]Post, error) {
+	total := getTotalDatabase()
+	if total == 0 {
+		return nil, errors.New("not exists values in database")
+	}
+
+	totalPages := int(math.Ceil(float64(total) / float64(size)))
+	if page > totalPages {
+		return nil, errors.New("number of page invalid")
+	}
+
 	pageNumber := size * (page - 1)
 
 	query := fmt.Sprintf("SELECT * FROM post LIMIT %d OFFSET %d", size, pageNumber)
@@ -39,4 +50,12 @@ func getPostsPagination(size int, page int) ([]Post, error) {
 	}
 
 	return posts, err
+}
+
+func getTotalDatabase() int {
+	var total int
+	query := fmt.Sprintf("SELECT COUNT(ID) FROM post")
+	mysql.DB.QueryRow(query).Scan(&total)
+
+	return total
 }

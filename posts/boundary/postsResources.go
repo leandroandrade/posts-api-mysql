@@ -110,7 +110,7 @@ func FindPostsPagination(writer http.ResponseWriter, request *http.Request) *han
 	posts, err := service.FindWithPagination(size, page)
 	if err != nil {
 		logger.Error.Println(err.Error())
-		return &handler.AppError{Error: err.Error(), Message: "internal Error", Code: 500}
+		return &handler.AppError{Error: err.Error(), Message: "validaton error", Code: 400}
 	}
 
 	writer.Header().Set("Content-Type", "application/json")
