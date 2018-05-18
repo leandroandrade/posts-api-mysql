@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
 	"strconv"
-	"errors"
 )
 
 func DeleteByID(id string) error {
@@ -22,7 +21,7 @@ func verifyPostExists(identifier int) error {
 	query := fmt.Sprintf("SELECT IF(COUNT(id),'true','false') FROM post WHERE id=%d", identifier)
 	mysql.DB.QueryRow(query).Scan(&exists)
 	if !exists {
-		return errors.New(fmt.Sprintf("the post %v not exist!", identifier))
+		return fmt.Errorf("the post %v not exist", identifier)
 	}
 	return nil
 
