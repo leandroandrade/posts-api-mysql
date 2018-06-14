@@ -1,4 +1,4 @@
-package service
+package model
 
 type Post struct {
 	Id          int    `json:"id,omitempty"`
