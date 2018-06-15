@@ -11,7 +11,7 @@ var DB *sql.DB
 func init() {
 	var err error
 
-	DB, err = sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/golang_posts")
+	DB, err = sql.Open("mysql", "root:root@tcp(container_mysql:3306)/golang_posts")
 	if err != nil {
 		log.Fatal(err.Error())
 	} else {
