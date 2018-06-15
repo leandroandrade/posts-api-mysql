@@ -18,11 +18,11 @@ func init() {
 		log.Print("Connection with database successful")
 	}
 
-	err = DB.Ping()
-	if err != nil {
-		log.Fatal("Cannot ping the database")
-	} else {
-		log.Print("Database ping successful")
-	}
+	//err = DB.Ping()
+	//if err != nil {
+	//	log.Fatal("Cannot ping the database")
+	//} else {
+	//	log.Print("Database ping successful")
+	//}
 
 }
