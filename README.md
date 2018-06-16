@@ -1,8 +1,12 @@
 # posts-api-mysql
 API for blog posts using Golang and MySQL
 
-##### Dependencies:
+## Dependencies:
 Using golang/dep to manager dependencies. See: https://github.com/golang/dep
+
+## Getting started
+  To create docker image: `docker build -t posts-api-mysql .`
+  To start containers: `docker-compose up -d`
 
 ##### URI`s
 |                |ASCII                         |
