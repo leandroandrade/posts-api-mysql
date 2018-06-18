@@ -7,15 +7,15 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
-func FindById(id string) (model.Post, error) {
+func FindById(id string) (*model.Post, error) {
 	var post model.Post
 
 	identifier, err := strconv.Atoi(id)
 	if err != nil {
-		return post, err
+		return &post, err
 	}
 
-	return post, getPostByID(identifier, &post)
+	return &post, getPostByID(identifier, &post)
 }
 
 func getPostByID(identifier int, post *model.Post) error {
