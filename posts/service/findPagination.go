@@ -9,7 +9,7 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
-func FindWithPagination(size string, page string) ([]model.Post, error) {
+func FindWithPagination(size string, page string) ([]*model.Post, error) {
 	sizeResult, _ := strconv.Atoi(size)
 	pageResult, _ := strconv.Atoi(page)
 
@@ -20,7 +20,7 @@ func FindWithPagination(size string, page string) ([]model.Post, error) {
 	return posts, nil
 }
 
-func getPostsPagination(size int, page int) ([]model.Post, error) {
+func getPostsPagination(size int, page int) ([]*model.Post, error) {
 	total := getTotalDatabase()
 	if total == 0 {
 		return nil, errors.New("not exists values in database")
@@ -40,14 +40,14 @@ func getPostsPagination(size int, page int) ([]model.Post, error) {
 	}
 	defer rows.Close()
 
-	var posts []model.Post
-	var post model.Post
+	posts := make([]*model.Post, 0)
 
 	for rows.Next() {
+		var post model.Post
 		if err = rows.Scan(&post.Id, &post.Description, &post.DatePosted); err != nil {
 			return nil, err
 		}
-		posts = append(posts, post)
+		posts = append(posts, &post)
 	}
 
 	return posts, err
