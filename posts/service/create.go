@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
-	"github.com/leandroandrade/posts-api-mysql/posts/model"
 	"time"
+	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
 func Save(body []byte) (*model.Post, error) {
@@ -14,7 +14,6 @@ func Save(body []byte) (*model.Post, error) {
 		return &post, errors.New("cannot unmarshal content")
 	}
 
-	post.DatePosted = time.Now().Local()
 	if err := process(&post); err != nil {
 		return &post, err
 	}
@@ -29,7 +28,9 @@ func process(post *model.Post) error {
 		return err
 	}
 
-	result, err := stmt.Exec(post.Description, post.DatePosted)
+	now := time.Now()
+	post.DatePosted = now.Format("2006-01-02")
+	result, err := stmt.Exec(post.Description, now.Local())
 	if err != nil {
 		return err
 	}
