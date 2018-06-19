@@ -2,27 +2,29 @@ package main
 
 import (
 	"github.com/gorilla/mux"
-	"net/http"
-	"log"
 	"github.com/leandroandrade/posts-api-mysql/posts/boundary"
-	"github.com/leandroandrade/posts-api-mysql/handler"
+	"github.com/urfave/negroni"
+	"github.com/phyber/negroni-gzip/gzip"
 )
 
 func main() {
-	router := mux.NewRouter().StrictSlash(true)
+	negr := negroni.Classic()
+	negr.Use(gzip.Gzip(gzip.BestSpeed))
 
+	router := mux.NewRouter().StrictSlash(true)
 	sub := router.PathPrefix("/resources").Subrouter()
 
 	sub.Path("/posts").Queries("size", "{size}", "page", "{page}").
-		Handler(handler.AppHandler(boundary.FindPostsPagination)).
+		HandlerFunc(boundary.FindPostsPagination).
 		Methods("GET")
 
-	sub.Handle("/posts", handler.AppHandler(boundary.GetPosts)).Methods("GET")
-	sub.Handle("/posts", handler.AppHandler(boundary.CreatePosts)).Methods("POST")
-	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.DeletePost)).Methods("DELETE")
-	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.UpdatePost)).Methods("PUT")
-	sub.Handle("/posts/{id:[0-9]+}", handler.AppHandler(boundary.GetPostByID)).Methods("GET")
+	sub.HandleFunc("/posts", boundary.GetPosts).Methods("GET")
+	sub.HandleFunc("/posts", boundary.CreatePosts).Methods("POST")
+	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.DeletePost).Methods("DELETE")
+	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.UpdatePost).Methods("PUT")
+	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.GetPostByID).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":3000", router))
+	negr.UseHandler(router)
+	negr.Run(":3000")
 
 }

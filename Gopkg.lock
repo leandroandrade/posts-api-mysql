@@ -20,14 +20,26 @@
   version = "v1.6.2"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/phyber/negroni-gzip"
+  packages = ["gzip"]
+  revision = "ef6356a5d02936b65ca8e60b604ed6b078aac8d3"
+
+[[projects]]
+  name = "github.com/urfave/negroni"
+  packages = ["."]
+  revision = "5dbbc83f748fc3ad38585842b0aedab546d0ea1e"
+  version = "v0.3.0"
+
+[[projects]]
   name = "google.golang.org/appengine"
   packages = ["cloudsql"]
-  revision = "150dc57a1b433e64154302bdc40b6bb8aefa313a"
-  version = "v1.0.0"
+  revision = "b1f26356af11148e710935ed1ac8a7f5702c7612"
+  version = "v1.1.0"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c67196bd88ba445dccb64bf10cc7783be6c79273ae01a915ae81b1074543f6d6"
+  inputs-digest = "f07fb74cc9dad23ee0bd17e97041d96c19e51d2af2ec44d5942129432a02e22e"
   solver-name = "gps-cdcl"
   solver-version = 1
