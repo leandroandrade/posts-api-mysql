@@ -20,8 +20,9 @@ func GetPosts(writer http.ResponseWriter, _ *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusInternalServerError,
-			Message: fmt.Sprintf("internal Error: %v", err.Error()),
+			Code:             http.StatusInternalServerError,
+			MessageUser:      "Cannot get post",
+			MessageDeveloper: fmt.Sprintf("internal Error: %v", err.Error()),
 		})
 		return
 	}
@@ -38,8 +39,9 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: fmt.Sprintf("cannot read a content: %v", err.Error()),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot save post",
+			MessageDeveloper: fmt.Sprintf("cannot read a content: %v", err.Error()),
 		})
 		return
 	}
@@ -49,8 +51,9 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: fmt.Sprintf("cannot read a content: %v", err.Error()),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot save post",
+			MessageDeveloper: fmt.Sprintf("cannot read a content: %v", err.Error()),
 		})
 		return
 	}
@@ -70,8 +73,9 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: fmt.Sprintf("cannot remove the post: %v", err.Error()),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot delete post",
+			MessageDeveloper: fmt.Sprintf("cannot remove the post: %v", err.Error()),
 		})
 		return
 	}
@@ -89,8 +93,9 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: fmt.Sprintf("cannot update the post: %v", err.Error()),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot update post",
+			MessageDeveloper: fmt.Sprintf("cannot update the post: %v", err.Error()),
 		})
 		return
 	}
@@ -100,8 +105,9 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: fmt.Sprintf("cannot update the post: %v", err.Error()),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot update post",
+			MessageDeveloper: fmt.Sprintf("cannot update the post: %v", err.Error()),
 		})
 		return
 	}
@@ -119,8 +125,9 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 		logger.Error.Println(err.Error())
 
 		response.JSON(writer, response.Message{
-			Code:    http.StatusNotFound,
-			Message: err.Error(),
+			Code:             http.StatusNotFound,
+			MessageUser:      "Failed to get post",
+			MessageDeveloper: err.Error(),
 		})
 		return
 	}
@@ -137,10 +144,11 @@ func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
 	posts, err := service.FindWithPagination(size, page)
 	if err != nil {
 		logger.Error.Println(err.Error())
-		
+
 		response.JSON(writer, response.Message{
-			Code:    http.StatusBadRequest,
-			Message: err.Error(),
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Failed when list posts",
+			MessageDeveloper: err.Error(),
 		})
 		return
 	}

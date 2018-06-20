@@ -6,8 +6,9 @@ import (
 )
 
 type Message struct {
-	Code    int    `json:"code,omitempty"`
-	Message string `json:"value,omitempty"`
+	Code             int    `json:"code,omitempty"`
+	MessageUser      string `json:"messageUser,omitempty"`
+	MessageDeveloper string `json:"messageDeveloper,omitempty"`
 }
 
 func JSON(writer http.ResponseWriter, message Message) {
