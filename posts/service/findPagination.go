@@ -9,9 +9,22 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
+const maxsize = 50
+
 func FindWithPagination(size string, page string) (*model.PostPaginationResponse, error) {
-	sizeResult, _ := strconv.Atoi(size)
-	pageResult, _ := strconv.Atoi(page)
+	sizeResult, err := strconv.Atoi(size)
+	if err != nil {
+		return nil, fmt.Errorf("field 'size' invalid: it is not a number: %v", err.Error())
+	}
+
+	pageResult, err := strconv.Atoi(page)
+	if err != nil {
+		return nil, fmt.Errorf("field 'page' invalid: it is not a number: %v", err.Error())
+	}
+
+	if sizeResult > maxsize {
+		return nil, fmt.Errorf("the field 'size' allow max 50 elements for each page")
+	}
 
 	posts, err := getPostsPagination(sizeResult, pageResult)
 	if err != nil {
@@ -50,7 +63,7 @@ func getPostsPagination(size int, page int) (*model.PostPaginationResponse, erro
 		posts = append(posts, &post)
 	}
 
-	return model.New(posts, total, totalPages, size, page), nil
+	return model.New(posts, total, totalPages, len(posts), page), nil
 }
 
 func getTotalDatabase() int {

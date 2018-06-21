@@ -21,7 +21,6 @@ func main() {
 		HandlerFunc(boundary.FindPostsPagination).
 		Methods("GET")
 
-	sub.HandleFunc("/posts", boundary.GetPosts).Methods("GET")
 	sub.HandleFunc("/posts", boundary.CreatePosts).Methods("POST")
 	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.DeletePost).Methods("DELETE")
 	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.UpdatePost).Methods("PUT")

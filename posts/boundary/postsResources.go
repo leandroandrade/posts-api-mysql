@@ -14,22 +14,6 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/response"
 )
 
-func GetPosts(writer http.ResponseWriter, _ *http.Request) {
-	posts, err := service.FindAll()
-	if err != nil {
-		logger.Error(err.Error())
-
-		response.JSONErr(writer, response.Message{
-			Code:             http.StatusInternalServerError,
-			MessageUser:      "Cannot get post",
-			MessageDeveloper: fmt.Sprintf("internal Error: %v", err.Error()),
-		})
-		return
-	}
-
-	response.JSON(writer, http.StatusOK, posts)
-}
-
 func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	body, err := ioutil.ReadAll(request.Body)
 	defer request.Body.Close()
