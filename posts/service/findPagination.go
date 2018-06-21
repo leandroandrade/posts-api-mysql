@@ -22,8 +22,12 @@ func FindWithPagination(size string, page string) (*model.PostPaginationResponse
 		return nil, fmt.Errorf("field 'page' invalid: it is not a number: %v", err.Error())
 	}
 
+	if pageResult <= 0 {
+		return nil, fmt.Errorf("field 'page' needs to be greater than or equal 1")
+	}
+
 	if sizeResult > maxsize {
-		return nil, fmt.Errorf("the field 'size' allow max 50 elements for each page")
+		return nil, fmt.Errorf("field 'size' allow max 50 elements for each page")
 	}
 
 	posts, err := getPostsPagination(sizeResult, pageResult)
