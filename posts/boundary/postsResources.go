@@ -67,7 +67,15 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) {
 func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
-	id, _ := strconv.Atoi(vars["id"])
+	id, err := strconv.Atoi(vars["id"])
+	if err != nil {
+		response.JSONErr(writer, response.Message{
+			Code:             http.StatusBadRequest,
+			MessageUser:      "Cannot update post",
+			MessageDeveloper: fmt.Sprintf("cannot update the post: field 'id' is not a number: %v", err.Error()),
+		})
+		return
+	}
 
 	var post model.Post
 	if err := json.NewDecoder(request.Body).Decode(&post); err != nil {

@@ -10,25 +10,26 @@ import (
 )
 
 func main() {
-	negr := negroni.Classic()
-	negr.Use(gzip.Gzip(gzip.BestSpeed))
-
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Home)
 
-	sub := router.PathPrefix("/resources").Subrouter()
-	sub.Path("/posts").Queries("size", "{size}", "page", "{page}").
-		HandlerFunc(boundary.FindPostsPagination).
-		Methods("GET")
+	resources := router.PathPrefix("/resources").Subrouter()
 
-	sub.HandleFunc("/posts", boundary.CreatePosts).Methods("POST")
-	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.DeletePost).Methods("DELETE")
-	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.UpdatePost).Methods("PUT")
-	sub.HandleFunc("/posts/{id:[0-9]+}", boundary.GetPostByID).Methods("GET")
+	posts := resources.PathPrefix("/posts").Subrouter()
+	posts.Methods("GET").Queries("size", "{size}", "page", "{page}").
+		HandlerFunc(boundary.FindPostsPagination)
+	posts.Methods("POST").HandlerFunc(boundary.CreatePosts)
+
+	post := resources.PathPrefix("/posts/{id}").Subrouter()
+	post.Methods("PUT").HandlerFunc(boundary.UpdatePost)
+	post.Methods("DELETE").HandlerFunc(boundary.DeletePost)
+	post.Methods("GET").HandlerFunc(boundary.GetPostByID)
+
+	negr := negroni.Classic()
+	negr.Use(gzip.Gzip(gzip.BestSpeed))
 
 	negr.UseHandler(router)
 	negr.Run(":3000")
-
 }
 
 func Home(writer http.ResponseWriter, _ *http.Request) {

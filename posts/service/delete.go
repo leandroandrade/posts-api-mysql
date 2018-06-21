@@ -7,7 +7,11 @@ import (
 )
 
 func DeleteByID(id string) error {
-	identifier, _ := strconv.Atoi(id)
+	identifier, err := strconv.Atoi(id)
+	if err != nil {
+		return fmt.Errorf("the 'id' is not a number: %v", err.Error())
+	}
+
 	if err := verifyPostExists(identifier); err != nil {
 		return err
 	}
