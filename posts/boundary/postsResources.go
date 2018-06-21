@@ -17,7 +17,7 @@ import (
 func GetPosts(writer http.ResponseWriter, _ *http.Request) {
 	posts, err := service.FindAll()
 	if err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusInternalServerError,
@@ -36,7 +36,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	body, err := ioutil.ReadAll(request.Body)
 	defer request.Body.Close()
 	if err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
@@ -48,7 +48,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 
 	post, err := service.Save(body)
 	if err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
@@ -70,7 +70,7 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) {
 
 	err := service.DeleteByID(vars["id"])
 	if err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
@@ -90,7 +90,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 
 	var post model.Post
 	if err := json.NewDecoder(request.Body).Decode(&post); err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
@@ -102,7 +102,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 
 	post.Id = id
 	if err := service.Update(post); err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
@@ -122,7 +122,7 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 
 	switch err {
 	case sql.ErrNoRows:
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusNotFound,
@@ -143,7 +143,7 @@ func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
 
 	posts, err := service.FindWithPagination(size, page)
 	if err != nil {
-		logger.Error.Println(err.Error())
+		logger.Error(err.Error())
 
 		response.JSON(writer, response.Message{
 			Code:             http.StatusBadRequest,
