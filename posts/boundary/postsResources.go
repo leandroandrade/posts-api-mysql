@@ -19,7 +19,7 @@ func GetPosts(writer http.ResponseWriter, _ *http.Request) {
 	if err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusInternalServerError,
 			MessageUser:      "Cannot get post",
 			MessageDeveloper: fmt.Sprintf("internal Error: %v", err.Error()),
@@ -27,9 +27,7 @@ func GetPosts(writer http.ResponseWriter, _ *http.Request) {
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(posts)
+	response.JSON(writer, http.StatusOK, posts)
 }
 
 func CreatePosts(writer http.ResponseWriter, request *http.Request) {
@@ -38,7 +36,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Cannot save post",
 			MessageDeveloper: fmt.Sprintf("cannot read a content: %v", err.Error()),
@@ -50,7 +48,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Cannot save post",
 			MessageDeveloper: fmt.Sprintf("cannot read a content: %v", err.Error()),
@@ -61,8 +59,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	writer.Header().Set("Content-Type", "application/json")
 	writer.Header().Set("Location", request.Host+request.URL.Path+"/"+strconv.Itoa(post.Id))
 
-	writer.WriteHeader(http.StatusCreated)
-	json.NewEncoder(writer).Encode(post)
+	response.JSON(writer, http.StatusCreated, post)
 }
 
 func DeletePost(writer http.ResponseWriter, request *http.Request) {
@@ -72,7 +69,7 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Cannot delete post",
 			MessageDeveloper: fmt.Sprintf("cannot remove the post: %v", err.Error()),
@@ -92,7 +89,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	if err := json.NewDecoder(request.Body).Decode(&post); err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Cannot update post",
 			MessageDeveloper: fmt.Sprintf("cannot update the post: %v", err.Error()),
@@ -104,7 +101,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	if err := service.Update(post); err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Cannot update post",
 			MessageDeveloper: fmt.Sprintf("cannot update the post: %v", err.Error()),
@@ -124,7 +121,7 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 	case sql.ErrNoRows:
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusNotFound,
 			MessageUser:      "Failed to get post",
 			MessageDeveloper: err.Error(),
@@ -132,9 +129,7 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(post)
+	response.JSON(writer, http.StatusOK, post)
 }
 
 func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
@@ -145,7 +140,7 @@ func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		logger.Error(err.Error())
 
-		response.JSON(writer, response.Message{
+		response.JSONErr(writer, response.Message{
 			Code:             http.StatusBadRequest,
 			MessageUser:      "Failed when list posts",
 			MessageDeveloper: err.Error(),
@@ -153,7 +148,5 @@ func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(http.StatusOK)
-	json.NewEncoder(writer).Encode(posts)
+	response.JSON(writer, http.StatusOK, posts)
 }

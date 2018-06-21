@@ -11,9 +11,17 @@ type Message struct {
 	MessageDeveloper string `json:"messageDeveloper,omitempty"`
 }
 
-func JSON(writer http.ResponseWriter, message Message) {
-	writer.Header().Set("Content-Type", "application/json")
-	writer.WriteHeader(message.Code)
+func JSONErr(writer http.ResponseWriter, message Message) {
+	write(writer, message.Code, message)
+}
 
-	json.NewEncoder(writer).Encode(message)
+func JSON(writer http.ResponseWriter, statuscode int, v interface{}) {
+	write(writer, statuscode, v)
+}
+
+func write(writer http.ResponseWriter, statucode int, v interface{}) {
+	writer.Header().Set("Content-Type", "application/json")
+	writer.WriteHeader(statucode)
+
+	json.NewEncoder(writer).Encode(v)
 }
