@@ -5,6 +5,8 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/mysql"
 	"fmt"
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
+	"database/sql"
+	"errors"
 )
 
 func FindById(id string) (*model.Post, error) {
@@ -15,7 +17,17 @@ func FindById(id string) (*model.Post, error) {
 		return &post, err
 	}
 
-	return &post, getPostByID(identifier, &post)
+	err = getPostByID(identifier, &post)
+	if err != nil {
+		switch err {
+		case sql.ErrNoRows:
+			return nil, errors.New("post not found")
+		default:
+			return nil, fmt.Errorf("cannot find post: %v", err.Error())
+		}
+	}
+
+	return &post, err
 }
 
 func getPostByID(identifier int, post *model.Post) error {

@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"strconv"
 	"github.com/gorilla/mux"
-	"database/sql"
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 	"fmt"
 	"github.com/leandroandrade/posts-api-mysql/response"
@@ -108,9 +107,7 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
 	post, err := service.FindById(vars["id"])
-
-	switch err {
-	case sql.ErrNoRows:
+	if err != nil {
 		logger.Error(err.Error())
 
 		response.JSONErr(writer, response.Payload{
