@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 )
 
-type Message struct {
-	Code             int    `json:"code,omitempty"`
-	MessageUser      string `json:"messageUser,omitempty"`
-	MessageDeveloper string `json:"messageDeveloper,omitempty"`
+type Payload struct {
+	Code    int    `json:"code,omitempty"`
+	Message string `json:"message,omitempty"`
+	Detail  string `json:"detail,omitempty"`
 }
 
-func JSONErr(writer http.ResponseWriter, message Message) {
-	write(writer, message.Code, message)
+func JSONErr(writer http.ResponseWriter, payload Payload) {
+	write(writer, payload.Code, payload)
 }
 
 func JSON(writer http.ResponseWriter, statuscode int, v interface{}) {
