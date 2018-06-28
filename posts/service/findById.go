@@ -9,7 +9,7 @@ import (
 	"errors"
 )
 
-func FindById(id string) (*model.Post, error) {
+func (Service) FindById(id string) (*model.Post, error) {
 	var post model.Post
 
 	identifier, err := strconv.Atoi(id)

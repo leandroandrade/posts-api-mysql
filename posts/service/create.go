@@ -8,7 +8,7 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
-func Save(body []byte) (*model.Post, error) {
+func (Service) Save(body []byte) (*model.Post, error) {
 	var post model.Post
 	if err := json.Unmarshal(body, &post); err != nil {
 		return &post, errors.New("cannot unmarshal content")

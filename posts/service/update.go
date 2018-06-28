@@ -6,7 +6,7 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
-func Update(post model.Post) error {
+func (Service) Update(post model.Post) error {
 	return processUpdate(post)
 }
 

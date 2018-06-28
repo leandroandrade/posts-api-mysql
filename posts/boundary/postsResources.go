@@ -13,7 +13,17 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/response"
 )
 
-func CreatePosts(writer http.ResponseWriter, request *http.Request) {
+type PostResources struct {
+	service *service.Service
+}
+
+func NewPostHandler(s *service.Service) *PostResources {
+	return &PostResources{
+		service: s,
+	}
+}
+
+func (p PostResources) CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	body, err := ioutil.ReadAll(request.Body)
 	defer request.Body.Close()
 	if err != nil {
@@ -27,7 +37,7 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 		return
 	}
 
-	post, err := service.Save(body)
+	post, err := p.service.Save(body)
 	if err != nil {
 		logger.Error(err.Error())
 
@@ -45,10 +55,10 @@ func CreatePosts(writer http.ResponseWriter, request *http.Request) {
 	response.JSON(writer, http.StatusCreated, post)
 }
 
-func DeletePost(writer http.ResponseWriter, request *http.Request) {
+func (p PostResources) DeletePost(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
-	err := service.DeleteByID(vars["id"])
+	err := p.service.DeleteByID(vars["id"])
 	if err != nil {
 		logger.Error(err.Error())
 
@@ -63,7 +73,7 @@ func DeletePost(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusNoContent)
 }
 
-func UpdatePost(writer http.ResponseWriter, request *http.Request) {
+func (p PostResources) UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
 	id, err := strconv.Atoi(vars["id"])
@@ -89,7 +99,7 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	post.Id = id
-	if err := service.Update(post); err != nil {
+	if err := p.service.Update(post); err != nil {
 		logger.Error(err.Error())
 
 		response.JSONErr(writer, response.Payload{
@@ -103,10 +113,10 @@ func UpdatePost(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusNoContent)
 }
 
-func GetPostByID(writer http.ResponseWriter, request *http.Request) {
+func (p PostResources) GetPostByID(writer http.ResponseWriter, request *http.Request) {
 	vars := mux.Vars(request)
 
-	post, err := service.FindById(vars["id"])
+	post, err := p.service.FindById(vars["id"])
 	if err != nil {
 		logger.Error(err.Error())
 
@@ -121,11 +131,11 @@ func GetPostByID(writer http.ResponseWriter, request *http.Request) {
 	response.JSON(writer, http.StatusOK, post)
 }
 
-func FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
+func (p PostResources) FindPostsPagination(writer http.ResponseWriter, request *http.Request) {
 	size := request.URL.Query().Get("size")
 	page := request.URL.Query().Get("page")
 
-	posts, err := service.FindWithPagination(size, page)
+	posts, err := p.service.FindWithPagination(size, page)
 	if err != nil {
 		logger.Error(err.Error())
 

@@ -11,7 +11,7 @@ import (
 
 const maxsize = 50
 
-func FindWithPagination(size string, page string) (*model.PostPaginationResponse, error) {
+func (Service) FindWithPagination(size string, page string) (*model.PostPaginationResponse, error) {
 	sizeResult, err := strconv.Atoi(size)
 	if err != nil {
 		return nil, fmt.Errorf("field 'size' invalid: it is not a number: %v", err.Error())

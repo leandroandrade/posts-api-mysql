@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func DeleteByID(id string) error {
+func (Service) DeleteByID(id string) error {
 	identifier, err := strconv.Atoi(id)
 	if err != nil {
 		return fmt.Errorf("the 'id' is not a number: %v", err.Error())
