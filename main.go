@@ -10,13 +10,15 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/service"
 )
 
+const PathPrefix = "/resources"
+
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Home)
 
 	postResources := boundary.NewPostHandler(service.NewService())
 
-	resources := router.PathPrefix("/resources").Subrouter()
+	resources := router.PathPrefix(PathPrefix).Subrouter()
 
 	posts := resources.PathPrefix("/posts").Subrouter()
 	posts.Methods("GET").Queries("size", "{size}", "page", "{page}").
