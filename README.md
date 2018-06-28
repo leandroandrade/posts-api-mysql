@@ -8,8 +8,9 @@ Using golang/dep to manager dependencies. See: https://github.com/golang/dep
   To create docker image: `docker build -t posts-api-mysql .`
   To start containers: `docker-compose up -d`
 
-##### URI`s
-|                |ASCII                         |
+##### Endponts
+
+|Method          |URI                         |
 |----------------|-------------------------------|
 |GET|http://localhost:3000/resources/posts|
 |POST|http://localhost:3000/resources/posts            |
