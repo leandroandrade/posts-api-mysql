@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 )
 
-type responseExample struct {
+type responseMock struct {
 	Message string
 }
 
@@ -35,12 +35,12 @@ func TestJSONErr(t *testing.T) {
 func TestJSON(t *testing.T) {
 	var testcases = []struct {
 		writer *httptest.ResponseRecorder
-		body   responseExample
+		body   responseMock
 		code   int
 	}{
 		{
 			writer: httptest.NewRecorder(),
-			body:   responseExample{Message: "Hello"},
+			body:   responseMock{Message: "Hello"},
 			code:   200,
 		},
 	}
