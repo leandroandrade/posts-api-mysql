@@ -1,4 +1,7 @@
 # posts-api-mysql
+[![Build Status](https://travis-ci.org/leandroandrade/posts-api-mysql.svg?branch=master)](https://travis-ci.org/leandroandrade/posts-api-mysql)
+[![codecov](https://codecov.io/gh/leandroandrade/posts-api-mysql/branch/master/graph/badge.svg)](https://codecov.io/gh/leandroandrade/posts-api-mysql)
+
 API for blog posts using Golang and MySQL
 
 ## Dependencies:
