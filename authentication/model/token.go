@@ -1,5 +1,5 @@
-package token
+package model
 
-type JWTToken struct {
+type Token struct {
 	Token string `json:"token" form:"token"`
 }
