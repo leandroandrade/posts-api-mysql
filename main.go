@@ -8,15 +8,18 @@ import (
 	"net/http"
 	"fmt"
 	"github.com/leandroandrade/posts-api-mysql/posts/service"
+	login "github.com/leandroandrade/posts-api-mysql/authentication/boundary"
 )
 
 const PathPrefix = "/resources"
 
 func main() {
+	postResources := boundary.NewPostHandler(service.NewService())
+	loginResources := login.NewLoginResources()
+
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/", Home)
-
-	postResources := boundary.NewPostHandler(service.NewService())
+	router.HandleFunc("/token-auth", loginResources.Login).Methods("POST")
 
 	resources := router.PathPrefix(PathPrefix).Subrouter()
 
