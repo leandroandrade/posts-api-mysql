@@ -34,7 +34,9 @@ func main() {
 	negr.Use(gzip.Gzip(gzip.BestSpeed))
 
 	negr.UseHandler(router)
-	negr.Run(":3000")
+	negr.Run("")
+
+	http.ListenAndServe(":3000", negr)
 }
 
 func Home(writer http.ResponseWriter, _ *http.Request) {

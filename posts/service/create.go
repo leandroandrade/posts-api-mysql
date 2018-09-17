@@ -1,24 +1,16 @@
 package service
 
 import (
-	"encoding/json"
-	"errors"
 	"github.com/leandroandrade/posts-api-mysql/mysql"
 	"time"
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
 )
 
-func (Service) Save(body []byte) (*model.Post, error) {
-	var post model.Post
-	if err := json.Unmarshal(body, &post); err != nil {
-		return &post, errors.New("cannot unmarshal content")
+func (Service) Save(post *model.Post) error {
+	if err := process(post); err != nil {
+		return err
 	}
-
-	if err := process(&post); err != nil {
-		return &post, err
-	}
-
-	return &post, nil
+	return nil
 
 }
 

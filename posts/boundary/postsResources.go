@@ -5,7 +5,6 @@ import (
 	"github.com/leandroandrade/posts-api-mysql/posts/service"
 	"encoding/json"
 	"github.com/leandroandrade/posts-api-mysql/logger"
-	"io/ioutil"
 	"strconv"
 	"github.com/gorilla/mux"
 	"github.com/leandroandrade/posts-api-mysql/posts/model"
@@ -14,20 +13,19 @@ import (
 )
 
 type PostResources struct {
-	service *service.Service
+	service service.Posts
 }
 
-func NewPostHandler(s *service.Service) *PostResources {
+func NewPostHandler(s service.Posts) *PostResources {
 	return &PostResources{
 		service: s,
 	}
 }
 
 func (p PostResources) CreatePosts(writer http.ResponseWriter, request *http.Request) {
-	body, err := ioutil.ReadAll(request.Body)
-	defer request.Body.Close()
-	if err != nil {
-		logger.Error(err.Error())
+	var post model.Post
+	if err := json.NewDecoder(request.Body).Decode(&post); err != nil {
+		logger.Error(err)
 
 		response.JSONErr(writer, response.Payload{
 			Code:    http.StatusBadRequest,
@@ -37,9 +35,9 @@ func (p PostResources) CreatePosts(writer http.ResponseWriter, request *http.Req
 		return
 	}
 
-	post, err := p.service.Save(body)
+	err := p.service.Save(&post)
 	if err != nil {
-		logger.Error(err.Error())
+		logger.Error(err)
 
 		response.JSONErr(writer, response.Payload{
 			Code:    http.StatusBadRequest,
